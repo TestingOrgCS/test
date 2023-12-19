@@ -1,0 +1,9 @@
+name: "calling_workflow"
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  call-workflow-1-in-local-repo:
+      uses: Tech-it-or-live-it-Secure-CICD/centralWorkflows/.github/workflows/centralGITLEAKS.yml@main
+      secrets: inherit
