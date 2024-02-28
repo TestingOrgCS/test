@@ -43,4 +43,6 @@ jobs:
         uses: actions/upload-artifact@master
         with:
            name: Dependency Check Report
-           path: $DC_HTML_REPORT
+           path: ${{ env.DC_HTML_REPORT }}
+        env:
+          DC_HTML_REPORT: ${{ env.DC_HTML_REPORT }}
