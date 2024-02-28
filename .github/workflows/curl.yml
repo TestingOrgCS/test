@@ -1,0 +1,33 @@
+name: curl and find file
+on:
+  workflow_call:
+  push:
+  workflow_dispatch:
+
+        
+jobs:
+  Secret_Scanning:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send report to DefectDojo
+
+        run: |
+          export "FILE=$(find . -type f -name "*dependency-check-report.xml")"
+          if [[ -z "$FILE" ]]; then exit 0; fi
+          export "SCAN_DATE=$(TZ='EET' date '+%Y-%m-%d')"
+          curl -s https://raw.githubusercontent.com/DefectDojo/django-DefectDojo/master/unittests/scans/dependency_check/single_vuln.xml > dependency-check-report.xml
+          curl -X POST "$DOJO_URL/api/v2/reimport-scan/" \
+                            -H "Authorization: Token $DOJO_TOKEN" \
+                            -F "active=true" \
+                            -F "scan_type=Dependency Check Scan" \
+                            -F "minimum_severity=Info" \
+                            -F "skip_duplicates=true" \
+                            -F "close_old_findings=true" \
+                            -F "file=@$FILE" \
+                            -F "scan_date=$SCAN_DATE" \
+                            -F "auto_create_context=True" \
+                            -F "product_name=${{ github.repository }}-${{ github.ref_name }}" \
+                            -F "engagement_name=${{ github.repository }}"
+        env:
+         DOJO_TOKEN: ${{ secrets.DOJO_TOKEN }}
+         DOJO_URL: ${{ secrets.DOJO_URL }}
