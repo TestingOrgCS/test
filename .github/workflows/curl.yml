@@ -12,10 +12,11 @@ jobs:
       - name: Send report to DefectDojo
 
         run: |
+          curl -s https://raw.githubusercontent.com/DefectDojo/django-DefectDojo/master/unittests/scans/dependency_check/single_vuln.xml > dependency-check-report.xml
           export "FILE=$(find . -type f -name "*dependency-check-report.xml")"
           if [[ -z "$FILE" ]]; then exit 0; fi
           export "SCAN_DATE=$(TZ='EET' date '+%Y-%m-%d')"
-          curl -s https://raw.githubusercontent.com/DefectDojo/django-DefectDojo/master/unittests/scans/dependency_check/single_vuln.xml > dependency-check-report.xml
+
           curl -X POST "$DOJO_URL/api/v2/reimport-scan/" \
                             -H "Authorization: Token $DOJO_TOKEN" \
                             -F "active=true" \
