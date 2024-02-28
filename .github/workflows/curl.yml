@@ -36,7 +36,7 @@ jobs:
       - name: Detect DC_HTML_REPORT
         run: |
           echo "test" >> dependency-check-report.html
-          export "DC_HTML_REPORT=$(find . -type f -name "*dependency-check-report.html")" >> GITHUB_ENV
+          export "DC_HTML_REPORT=$(find . -type f -name "*dependency-check-report.html")" >> $GITHUB_ENV
           
         
       - name: Upload results - SCA
