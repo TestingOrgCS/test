@@ -36,15 +36,13 @@ jobs:
       - name: Detect DC_HTML_REPORT
         run: |
           echo "test" >> dependency-check-report.html
-          export "DC_HTML_REPORT=$(find . -type f -name "*dependency-check-report.html")" >> $GITHUB_ENV
+          DC_HTML_REPORT=$(find . -type f -name "*dependency-check-report.html")
+          echo "DC_HTML_REPORT=$DC_HTML_REPORT" >> $GITHUB_ENV
           echo $DC_HTML_REPORT
           ls
-          
         
       - name: Upload results - SCA
         uses: actions/upload-artifact@master
         with:
            name: Dependency Check Report
            path: ${{ env.DC_HTML_REPORT }}
-        env:
-          DC_HTML_REPORT: ${{ env.DC_HTML_REPORT }}
